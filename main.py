@@ -12,9 +12,9 @@ email = df[df.columns[1]].to_list()
 links = df[df.columns[2]].to_list()
 
 # I AM NOT THE OWNER OF THIS API AND ONLY USING IT FOR THE PROJECT!
-api = "https://arcadehelper.vercel.app/api/search?url="
+api = "https://arcadehelper.tech/api/jam?url="
 
-df2 = pd.DataFrame(columns=["Name", "Email", "Public url", "Points", "Eligibility", "Swags"])
+df2 = pd.DataFrame(columns=["Name", "Email", "Public url", "completionPercentage"])
 
 for i in range(len(links)):
     url = api + links[i]
@@ -33,44 +33,20 @@ for i in range(len(links)):
         
       
     print(f"Name: {name[i]}, ", end="")
-    points = result["totalPoints"]
-    points = float(points)
-    print(f"Total Points: {points}", end="\n")
-
-    # for the eligibility
-    if points >= 10:
-      eligible = True
-    else:
-      eligible = False
-      arcadeSwags = "NULL"
-
-    if eligible and points < 25:
-      arcadeSwags = "Standard Milestone"
-
-    elif eligible and points < 40:
-      arcadeSwags = "Advanced Milestone"
-
-    elif eligible and points < 60:
-      arcadeSwags = "Premium Milestone"
-
-    elif eligible and points < 70:
-      arcadeSwags = "Premium Plus Milestone"
-
-    elif eligible and points >= 70:
-      arcadeSwags = "Champions Milestone"
+    completionPercentage = float(result["completionPercentage"])
+    # completionPercentage = float(points)
+    print(f"completionPercentage: {completionPercentage}", end="\n")
 
     new_data = {"Name": name[i],
                 "Email": email[i],
                 "Public url": links[i],
-                "Points": points,
-                "Eligibility" : eligible,
-                "Swags" : arcadeSwags
+                "completionPercentage": completionPercentage,
                 }
     # to add data in the dataFrame
     df2.loc[len(df2)] = new_data
     time.sleep(1)
     
 # sort the data wrt arcade points
-resulted = df2.sort_values(by="Points", ascending=False)
+resulted = df2.sort_values(by="completionPercentage", ascending=False)
 resulted.to_csv(output_file, index=0)
 exit()
